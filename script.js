@@ -19,14 +19,12 @@ createApp({
     document.removeEventListener("keyup", this.move);
   },
   methods: {
-
-    
     findRandomEmptyCell() {
       var cells = [];
       for ([rowI, row] of this.boardState.entries()) {
         for ([colI, col] of row.entries()) {
           if (!col) {
-          cells.push({colI, rowI})
+            cells.push({ colI, rowI });
           }
         }
       }
@@ -34,7 +32,6 @@ createApp({
       if (cells.length) {
         return cells[Math.floor(Math.random() * cells.length)];
       }
-
     },
 
     handleMovement(x, y, rowI, colI) {
@@ -48,7 +45,7 @@ createApp({
           ) {
             this.boardState[rowI + y][colI] = this.boardState[rowI][colI] * 2;
             this.score += this.boardState[rowI][colI] * 2;
-            
+
             this.boardState[rowI][colI] = 0;
           } else {
             return;
@@ -62,14 +59,14 @@ createApp({
           return;
         }
       } else {
-                if (colI + x < 4 && colI + x > -1) {
+        if (colI + x < 4 && colI + x > -1) {
           if (this.boardState[rowI][colI + x] == 0) {
             this.boardState[rowI][colI + x] = this.boardState[rowI][colI];
             this.boardState[rowI][colI] = 0;
           } else if (
             this.boardState[rowI][colI + x] == this.boardState[rowI][colI]
           ) {
-            this.boardState[rowI][colI+ x] = this.boardState[rowI][colI] * 2;
+            this.boardState[rowI][colI + x] = this.boardState[rowI][colI] * 2;
             this.score += this.boardState[rowI][colI] * 2;
 
             this.boardState[rowI][colI] = 0;
@@ -84,7 +81,6 @@ createApp({
         } else {
           return;
         }
-
       }
     },
     move(event) {
@@ -92,14 +88,11 @@ createApp({
       let y = 0;
       if (event.key == "ArrowDown") {
         y = 1;
-      }
-      else if (event.key == "ArrowUp") {
+      } else if (event.key == "ArrowUp") {
         y = -1;
-      }
-      else if (event.key == "ArrowLeft") {
+      } else if (event.key == "ArrowLeft") {
         x = -1;
-      }
-      else if (event.key == "ArrowRight") {
+      } else if (event.key == "ArrowRight") {
         x = 1;
       } else {
         return;
@@ -115,13 +108,15 @@ createApp({
         }
       }
       let cell = this.findRandomEmptyCell();
-      this.boardState[cell.rowI][cell.colI] = (Math.random() > 0.9) ? 4 : 2;
+      if (cell) {
+        this.boardState[cell.rowI][cell.colI] = Math.random() > 0.9 ? 4 : 2;
+      }
       console.log(this.boardState);
     },
   },
   computed: {
     won() {
-      return this.boardState.some(row => row.includes(2048));
+      return this.boardState.some((row) => row.includes(2048));
     },
   },
 }).mount("#app");
